@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import { JwtModule } from '@nestjs/jwt';
 import { UserController } from './user.controller';
 // import jwtConfig from 'src/auth/jwt/jwt.config';
-import { JwtStrategy } from 'src/auth/jwt/jwt.strategy';
+// import { JwtStrategy } from 'src/auth/jwt/jwt.strategy';
 import { UserService } from './user.service';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    AuthModule,
     // ConfigModule.forFeature(jwtConfig),
     // ConfigModule.forRoot({ isGlobal: true }),
     // PassportModule,
@@ -27,6 +29,6 @@ import { UserService } from './user.service';
     // }),
   ],
   controllers: [UserController],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService],
 })
 export class UserModule {}
