@@ -4,7 +4,7 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,6 +20,6 @@ export class Product {
   model: string;
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
-  @OneToOne(() => InvoiceDetail, (invoiceDetail) => invoiceDetail.product)
-  invoiceDetail: InvoiceDetail;
+  @OneToMany(() => InvoiceDetail, (invoiceDetail) => invoiceDetail.product)
+  invoiceDetails: InvoiceDetail[];
 }
