@@ -24,47 +24,17 @@ export class InvoiceService {
   ) {}
 
   async create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice> {
-    // const customer = await this.customerRepository.findOne({
-    //   where: { id: createInvoiceDto.customerId },
-    // });
-    // if (!customer) {
-    //   throw new NotFoundException(
-    //     `Customer with ID ${createInvoiceDto.customerId} not found`,
-    //   );
-    // }
-
-    const user = await this.userRepository.findOne({
-      where: { id: createInvoiceDto.userId },
-    });
-    if (!user) {
-      throw new NotFoundException(
-        `User with ID ${createInvoiceDto.userId} not found`,
-      );
-    }
-
     const invoice = this.invoiceRepository.create({
       ...createInvoiceDto,
-      // customer: customer,
-      user: user,
     });
 
     const savedInvoice = await this.invoiceRepository.save(invoice);
 
     const invoiceDetailsPromises = createInvoiceDto.invoiceDetail.map(
       async (detailDto) => {
-        const product = await this.productRepository.findOne({
-          where: { id: detailDto.productId },
-        });
-        if (!product) {
-          throw new NotFoundException(
-            `Product with ID ${detailDto.productId} not found`,
-          );
-        }
-
         const invoiceDetail = this.invoiceDetailRepository.create({
           ...detailDto,
           invoice: savedInvoice,
-          product: product,
         });
         return this.invoiceDetailRepository.save(invoiceDetail);
       },

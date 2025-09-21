@@ -23,7 +23,6 @@ export class IsExistConstraint implements ValidatorConstraintInterface {
     }
 
     try {
-      console.log('Using repository for entity:', entity);
       const repository = this.dataSource.getRepository(entity);
 
       const record = await repository.findOne({ where: { id: value } });
@@ -36,7 +35,7 @@ export class IsExistConstraint implements ValidatorConstraintInterface {
 
   defaultMessage(args: ValidationArguments) {
     const [entity] = args.constraints;
-    return `${entity.name} with ID ${args.value} does not existsdasd.`;
+    return `${entity.name} with ID ${args.value} does not exists.`;
   }
 }
 
