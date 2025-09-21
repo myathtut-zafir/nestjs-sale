@@ -10,6 +10,7 @@ import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { CustomerModule } from './customer/customer.module';
+import { IsExistConstraint } from './validation/is-exist.validator';
 
 @Module({
   imports: [
@@ -34,6 +35,6 @@ import { CustomerModule } from './customer/customer.module';
     CustomerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, IsExistConstraint],
 })
 export class AppModule {}

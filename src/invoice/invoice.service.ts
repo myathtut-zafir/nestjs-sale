@@ -24,14 +24,14 @@ export class InvoiceService {
   ) {}
 
   async create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice> {
-    const customer = await this.customerRepository.findOne({
-      where: { id: createInvoiceDto.customerId },
-    });
-    if (!customer) {
-      throw new NotFoundException(
-        `Customer with ID ${createInvoiceDto.customerId} not found`,
-      );
-    }
+    // const customer = await this.customerRepository.findOne({
+    //   where: { id: createInvoiceDto.customerId },
+    // });
+    // if (!customer) {
+    //   throw new NotFoundException(
+    //     `Customer with ID ${createInvoiceDto.customerId} not found`,
+    //   );
+    // }
 
     const user = await this.userRepository.findOne({
       where: { id: createInvoiceDto.userId },
@@ -44,7 +44,7 @@ export class InvoiceService {
 
     const invoice = this.invoiceRepository.create({
       ...createInvoiceDto,
-      customer: customer,
+      // customer: customer,
       user: user,
     });
 
