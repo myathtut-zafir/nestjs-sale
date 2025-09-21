@@ -8,45 +8,43 @@ import {
   registerDecorator,
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityTarget } from 'typeorm'; // Import EntityTarget
+import { DataSource, EntityTarget, Repository } from 'typeorm';
 
 // Define a type for an Entity constructor
-type EntityConstructor = { new (...args: any[]): any; name: string };
+type EntityConstructor = { new (...args: any[]): object; name: string }; // Changed to object
 
 @ValidatorConstraint({ name: 'IsExist', async: true })
 @Injectable()
 export class IsExistConstraint implements ValidatorConstraintInterface {
   constructor(private readonly dataSource: DataSource) {}
 
-  async validate(value: any, args: ValidationArguments) {
-    const [entity] = args.constraints as [EntityConstructor]; // Use EntityConstructor
-    if (!value || !entity) {
+  async validate(value: number, args: ValidationArguments) {
+    const [entityClass] = args.constraints as [EntityConstructor];
+    if (!value || !entityClass) {
       return false;
     }
 
     try {
-      // TypeORM's getRepository expects EntityTarget<Entity>
-      const repository = this.dataSource.getRepository(
-        entity as EntityTarget<any>,
+      // Get the repository, explicitly typing it as Repository<object>
+      const repository: Repository<object> = this.dataSource.getRepository(
+        entityClass as EntityTarget<object>,
       );
-
       const record = await repository.findOne({ where: { id: value } });
-      return record !== null; // Return true if the record exists
+      return record !== null;
     } catch (e) {
       console.log('Record found:', e);
-      return false; // Return false on error
+      return false;
     }
   }
 
   defaultMessage(args: ValidationArguments) {
-    const [entity] = args.constraints as [EntityConstructor]; // Use EntityConstructor
-    return `${entity.name} with ID ${args.value} does not exist.`;
+    const [entityClass] = args.constraints as [EntityConstructor];
+    return `${entityClass.name} with ID ${args.value} does not exist.`;
   }
 }
 
-// This is the decorator function that you'll use in your DTOs
 export function IsExist(
-  entity: EntityConstructor, // Use EntityConstructor here as well
+  entity: EntityConstructor,
   validationOptions?: ValidationOptions,
 ) {
   return function (object: Object, propertyName: string) {
