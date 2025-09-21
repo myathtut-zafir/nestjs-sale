@@ -72,6 +72,17 @@ export class InvoiceService {
 
     await Promise.all(invoiceDetailsPromises);
 
-    return savedInvoice;
+    // After saving the invoice and its details, fetch the invoice again with relations
+    const finalInvoice = await this.invoiceRepository.findOne({
+      where: { id: savedInvoice.id },
+      relations: ['customer', 'user', 'invoiceDetail', 'invoiceDetail.product'],
+    });
+
+    if (!finalInvoice) {
+      throw new NotFoundException(
+        `Invoice with ID ${savedInvoice.id} not found after creation`,
+      );
+    }
+    return finalInvoice;
   }
 }

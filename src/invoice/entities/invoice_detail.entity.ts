@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Invoice } from './invoice.entity';
 import { Product } from 'src/product/entities/products.entity';
 
@@ -14,8 +8,7 @@ export class InvoiceDetail {
   id: number;
   @ManyToOne(() => Invoice, (invoice) => invoice.invoiceDetail)
   invoice: Invoice;
-  @ManyToOne(() => Product)
-  @JoinColumn()
+  @ManyToOne(() => Product, (product) => product.invoiceDetails)
   product: Product;
   @Column({ type: 'date' })
   date: Date;
