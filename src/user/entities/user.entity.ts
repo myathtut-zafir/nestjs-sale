@@ -1,5 +1,12 @@
 import { Role } from 'src/iam/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Invoice } from 'src/invoice/entities/invoice.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -13,4 +20,6 @@ export class User {
   password: string;
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
+  @OneToMany(() => Invoice, (invoice) => invoice.user)
+  invoices: Invoice[];
 }
