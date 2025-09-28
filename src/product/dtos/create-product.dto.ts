@@ -1,4 +1,6 @@
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { Category } from 'src/category/entities/category.entity';
+import { IsExist } from 'src/validation/is-exist.validator';
 
 export class CreateProductDto {
   @IsString()
@@ -14,5 +16,6 @@ export class CreateProductDto {
   model: string;
 
   @IsNumber()
+  @IsExist(Category)
   categoryId: number;
 }

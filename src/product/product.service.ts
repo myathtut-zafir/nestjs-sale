@@ -16,15 +16,10 @@ export class ProductService {
 
   async create(createProductDto: CreateProductDto) {
     const { categoryId, ...productDetails } = createProductDto;
-    const category = await this.categoryRepository.findOneBy({
-      id: categoryId,
-    });
-    if (!category) {
-      throw new NotFoundException(`Category with id #${categoryId} not found`);
-    }
+    console.log(categoryId);
     const product = this.productRepository.create({
       ...productDetails,
-      category,
+      category: { id: categoryId },
     });
     return this.productRepository.save(product);
   }
