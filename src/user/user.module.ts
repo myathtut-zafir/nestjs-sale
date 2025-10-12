@@ -9,24 +9,28 @@ import { UserController } from './user.controller';
 // import { JwtStrategy } from 'src/auth/jwt/jwt.strategy';
 import { UserService } from './user.service';
 import { AuthModule } from 'src/auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import jwtConfig from 'src/auth/jwt/jwt.config';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     AuthModule,
-    // ConfigModule.forFeature(jwtConfig),
-    // ConfigModule.forRoot({ isGlobal: true }),
-    // PassportModule,
-    // JwtModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => ({
-    //     secret: configService.get<string>('JWT_SECRET'),
-    //     signOptions: {
-    //       expiresIn: configService.get<string>('JWT_EXPIRATION') || '1h',
-    //     },
-    //   }),
-    // }),
+    ConfigModule.forFeature(jwtConfig),
+    ConfigModule.forRoot({ isGlobal: true }),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRATION') || '1h',
+        },
+      }),
+    }),
   ],
   controllers: [UserController],
   providers: [UserService],
