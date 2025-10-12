@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { Category } from 'src/category/entities/category.entity';
+import { AuthUserDto } from 'src/iam/dtos/auth-user.dto';
 
 @Injectable()
 export class ProductService {
@@ -14,12 +15,13 @@ export class ProductService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: AuthUserDto) {
     const { categoryId, ...productDetails } = createProductDto;
     console.log(categoryId);
     const product = this.productRepository.create({
       ...productDetails,
       category: { id: categoryId },
+      user: { id: user.userId },
     });
     return this.productRepository.save(product);
   }

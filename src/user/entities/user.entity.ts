@@ -1,5 +1,6 @@
 import { Role } from 'src/iam/entities/role.entity';
 import { Invoice } from 'src/invoice/entities/invoice.entity';
+import { Product } from 'src/product/entities/products.entity';
 import {
   Column,
   Entity,
@@ -22,4 +23,6 @@ export class User {
   role: Role;
   @OneToMany(() => Invoice, (invoice) => invoice.user)
   invoices: Invoice[];
+  @OneToMany(() => Product, (product) => product.user)
+  products: Product[];
 }

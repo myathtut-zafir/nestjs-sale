@@ -1,5 +1,6 @@
 import { Category } from 'src/category/entities/category.entity';
 import { InvoiceDetail } from 'src/invoice/entities/invoice_detail.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -22,4 +23,6 @@ export class Product {
   category: Category;
   @OneToMany(() => InvoiceDetail, (invoiceDetail) => invoiceDetail.product)
   invoiceDetails: InvoiceDetail[];
+  @ManyToOne(() => User, (user) => user.products)
+  user: User;
 }
