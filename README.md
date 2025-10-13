@@ -80,3 +80,7 @@ To run the application in development mode with file watching:
 
 ```bash
 npm run start:dev
+```
+testing
+```
+npm run test:e2e
